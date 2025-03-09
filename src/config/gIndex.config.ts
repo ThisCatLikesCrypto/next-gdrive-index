@@ -47,7 +47,7 @@ const config: z.input<typeof Schema_Config> = {
      * Then, copy the folder id and paste it here
      */
     rootFolder:
-      "1adfbed5093e8ede909a64b10f185d739470382e079ab059814761061e8007060f19b09d10515190295ca9964dc51c3372;894e5689f12fd8465a6882a0",
+      "f63995af89c3d908887ab17c6ebc7805f3cea304eb5f751b2ce8e5cc801b95d660758b633a642f64ece470835cf9d9e388;09f28c73ef6a415669cd52b0",
 
     /**
      * If your rootfolder inside a shared drive, you NEED to set this to true
@@ -124,7 +124,7 @@ const config: z.input<typeof Schema_Config> = {
      *
      * Default: 100MB
      */
-    streamMaxSize: 10485760, // 10MB
+    streamMaxSize: 104857600,
 
     /**
      * Maximum file size that can be downloaded via api routes

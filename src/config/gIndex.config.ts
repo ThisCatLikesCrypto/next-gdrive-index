@@ -47,7 +47,7 @@ const config: z.input<typeof Schema_Config> = {
      * Then, copy the folder id and paste it here
      */
     rootFolder:
-      "f63995af89c3d908887ab17c6ebc7805f3cea304eb5f751b2ce8e5cc801b95d660758b633a642f64ece470835cf9d9e388;09f28c73ef6a415669cd52b0",
+      "e31141bc9bc075c5bf1b82fcf76c00f58fdab205e45ca756dd05cd85cd5b8f5f6b5f210bb41c41524a7c32e25730af1990;e5e28fc9aac87c3f8a74616e",
 
     /**
      * If your rootfolder inside a shared drive, you NEED to set this to true
@@ -62,8 +62,8 @@ const config: z.input<typeof Schema_Config> = {
      *
      * Then you need to encrypt it using `/api/internal/encrypt?q=:shared_drive_id` route
      */
-    isTeamDrive: false,
-    sharedDrive: "",
+    isTeamDrive: true,
+    sharedDrive: "cc983ff4ada4d0063cff41a914cc106e824520a0e6a9975447409f2f6d535d910f704d;8410e72eb62369e4b3f03c5e",
 
     defaultQuery: ["trashed = false", "(not mimeType contains 'google-apps' or mimeType contains 'folder')"],
     defaultField:
@@ -172,11 +172,11 @@ const config: z.input<typeof Schema_Config> = {
      *
      * You can set it to undefined if you don't want to use it
      */
-    siteName: "next-gdrive-index",
+    siteName: "atl iso archives (testing)",
     siteNameTemplate: "%s - %t",
-    siteDescription: "test",
+    siteDescription: "Archive _all_ the ISOs",
     siteIcon: "/logo.svg",
-    siteAuthor: "wilbur",
+    siteAuthor: "All Things Linux",
     favIcon: "/favicon.png",
     /**
      * Next.js Metadata robots object
@@ -285,7 +285,7 @@ const config: z.input<typeof Schema_Config> = {
     "value": "{{ poweredBy }}"
   },
   {
-    "value": "Made with ❤️ by [**{{ author }}**](https://c48.uk)"
+    "value": " [**{{ author }}**](https://allthingslinux.org)"
   }
 ],
     /**

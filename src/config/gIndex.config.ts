@@ -172,9 +172,9 @@ const config: z.input<typeof Schema_Config> = {
      *
      * You can set it to undefined if you don't want to use it
      */
-    siteName: "atl iso archives (testing)",
+    siteName: "ATL ISO Archives",
     siteNameTemplate: "%s - %t",
-    siteDescription: "Archive _all_ the ISOs",
+    siteDescription: "Comprehensive (or, will be) archive of ISO files from ATL",
     siteIcon: "/logo.svg",
     siteAuthor: "All Things Linux",
     favIcon: "/favicon.png",

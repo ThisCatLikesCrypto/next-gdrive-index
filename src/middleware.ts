@@ -36,8 +36,11 @@ export async function middleware(req: NextRequest) {
     return response;
   }
 
-  // Skip the middleware if the pathname is the root
-  if (pathname === "/") return response;
+  // Cache root for performance
+  if (pathname === "/") {
+    response.headers.set("Cache-Control", "public, s-maxage=3600");
+    return response;
+  }
 
   // Get search params
   const searchParams = new URLSearchParams(req.nextUrl.search);

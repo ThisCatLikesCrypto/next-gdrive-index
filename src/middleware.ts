@@ -31,6 +31,7 @@ export async function middleware(req: NextRequest) {
     },
   });
   response.headers.set("X-Pathname", req.nextUrl.pathname);
+  response.headers.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=59");
   if (pathname.startsWith("/ngdi-internal/embed/")) {
     response.headers.set("Content-Security-Policy", cspHeader);
     return response;
@@ -38,7 +39,6 @@ export async function middleware(req: NextRequest) {
 
   // Cache root for performance
   if (pathname === "/") {
-    response.headers.set("Cache-Control", "public, s-maxage=3600");
     return response;
   }
 

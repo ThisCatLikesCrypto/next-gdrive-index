@@ -52,6 +52,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       status: 302,
       headers: {
         Location: decryptedLink,
+        "Cache-Control": "public, max-age=43200", // cache for 12 hours
       },
     });
   } catch (error) {
@@ -67,6 +68,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       },
       {
         status: Number(status),
+        headers: {
+          "Cache-Control": "no-store", // avoid caching error responses
+        },
       },
     );
   }

@@ -35,7 +35,7 @@ const config: z.input<typeof Schema_Config> = {
    *
    * @default "public, max-age=60, s-maxage=60, stale-while-revalidate"
    */
-  cacheControl: "public, max-age=60, s-maxage=60, stale-while-revalidate",
+  cacheControl: "public, max-age=3600, s-maxage=3600, stale-while-revalidate",
 
   apiConfig: {
     /**
@@ -160,7 +160,7 @@ const config: z.input<typeof Schema_Config> = {
      *
      * Default: 1 hour
      */
-    temporaryTokenDuration: 6,
+    temporaryTokenDuration: 168,
   },
 
   siteConfig: {
@@ -292,7 +292,7 @@ const config: z.input<typeof Schema_Config> = {
      * Add page load time on the footer
      * If you don't want to use it, you can set it to false
      */
-    experimental_pageLoadTime: false,
+    experimental_pageLoadTime: "ms",
   },
 };
 

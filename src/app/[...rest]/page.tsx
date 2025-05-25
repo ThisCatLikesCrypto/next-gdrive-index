@@ -17,7 +17,7 @@ import { CheckPagePassword } from "~/actions/password";
 import { ValidatePaths } from "~/actions/paths";
 import { CreateFileToken } from "~/actions/token";
 
-export const revalidate = 60;
+export const revalidate = 3600;
 export const dynamic = "force-dynamic";
 
 type Props = {

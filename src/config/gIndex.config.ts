@@ -35,7 +35,7 @@ const config: z.input<typeof Schema_Config> = {
    *
    * @default "public, max-age=60, s-maxage=60, stale-while-revalidate"
    */
-  cacheControl: "public, max-age=3600, s-maxage=3600, stale-while-revalidate",
+  cacheControl: "public, max-age=86400, s-maxage=3600, stale-while-revalidate",
 
   apiConfig: {
     /**

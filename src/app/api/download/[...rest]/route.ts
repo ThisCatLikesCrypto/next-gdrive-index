@@ -9,7 +9,7 @@ import { ValidateFileToken } from "~/actions/token";
 
 import config from "config";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "auto";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ rest: string[] }> }) {
   const { rest } = await params;

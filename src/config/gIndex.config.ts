@@ -146,7 +146,7 @@ const config: z.input<typeof Schema_Config> = {
      *
      * Default: false
      */
-    allowDownloadProtectedFile: false,
+    allowDownloadProtectedFile: true,
 
     /**
      * Duration in hours.

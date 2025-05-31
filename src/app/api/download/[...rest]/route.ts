@@ -9,7 +9,7 @@ import { ValidateFileToken } from "~/actions/token";
 
 import config from "config";
 
-export const dynamic = "force-static"; // this could be a very bad idea
+export const dynamic = "force-static";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ rest: string[] }> }) {
   const { rest } = await params;

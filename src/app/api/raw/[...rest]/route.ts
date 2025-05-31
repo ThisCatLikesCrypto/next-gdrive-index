@@ -5,7 +5,7 @@ import { encryptionService } from "~/lib/utils.server";
 import { GetFile } from "~/actions/files";
 import { ValidatePaths } from "~/actions/paths";
 
-export const dynamic = "auto";
+export const dynamic = "force-static";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ rest: string[] }> }) {
   const { rest } = await params;

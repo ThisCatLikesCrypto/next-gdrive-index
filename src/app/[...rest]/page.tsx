@@ -18,7 +18,7 @@ import { ValidatePaths } from "~/actions/paths";
 import { CreateFileToken } from "~/actions/token";
 
 export const revalidate = 3600;
-export const dynamic = "force-dynamic";
+export const dynamic = "auto";
 
 type Props = {
   params: Promise<{

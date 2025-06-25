@@ -9,7 +9,7 @@ import { GetReadme, ListFiles } from "~/actions/files";
 import config from "config";
 
 export const revalidate = 3600;
-export const dynamic = "auto";
+export const dynamic = "force-static";
 
 export default async function RootPage() {
   const [data, readme] = await Promise.all([ListFiles(), GetReadme()]);

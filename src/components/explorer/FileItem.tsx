@@ -17,8 +17,7 @@ import Icon from "~/components/ui/icon";
 
 import { type TLayout } from "~/context/layoutContext";
 import useRouter from "~/hooks/usePRouter";
-import { getPreviewIcon } from "~/lib/previewHelper";
-import { bytesToReadable, cn, durationToReadable, formatDate } from "~/lib/utils";
+import { bytesToReadable, cn } from "~/lib/utils";
 
 import { type Schema_File } from "~/types/schema";
 
@@ -39,19 +38,6 @@ export default function FileItem({ data, layout }: Props) {
   const contextButtonRef = useRef<HTMLDivElement>(null);
   const copyTimeout = useRef<NodeJS.Timeout | null>(null);
 
-  const useThumbnail = useMemo<boolean>(
-    () => !!(data.thumbnailLink && (data.mimeType.includes("image") || data.mimeType.includes("video"))),
-    [data],
-  );
-  // Using proxied URL to avoid CORS issues
-  // Also using state to load smaller thumbnail first
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>(`/api/thumb/${data.encryptedId}?size=2`);
-  const [thumbnailLoading, setThumbnailLoading] = useState<boolean>(true);
-
-  // Unused for now
-  // Might be added on next version (?)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [isShareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [copyStatus, setCopyStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -87,10 +73,6 @@ export default function FileItem({ data, layout }: Props) {
     }
   }, [data.encryptedId, data.mimeType, data.name, filePath]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onShare = useCallback(async () => {
-    setShareDialogOpen(true);
-  }, []);
   const onDownload = useCallback(async () => {
     void 0;
   }, []);
@@ -111,72 +93,6 @@ export default function FileItem({ data, layout }: Props) {
               layout === "list" && "flex items-center",
             )}
           >
-            {/* Thumbnail / Icon */}
-            <div
-              className={cn(
-                "relative grid aspect-video h-24 w-full shrink-0 place-items-center overflow-hidden bg-background mobile:h-28 tablet:h-32",
-                layout === "list" && "aspect-square h-20 w-20 mobile:h-24 mobile:w-24 tablet:h-28 tablet:w-28",
-              )}
-            >
-              {useThumbnail ? (
-                <>
-                  <img
-                    src={thumbnailUrl}
-                    alt={data.name}
-                    className={cn(
-                      "absolute -z-0 h-24 w-full shrink-0 grow-0 object-cover object-center opacity-50 blur-sm mobile:h-28 tablet:h-32",
-                      layout === "list" && "h-20 mobile:h-24 tablet:h-28",
-                    )}
-                  />
-                  <img
-                    src={thumbnailUrl}
-                    alt={data.name}
-                    onLoad={() => {
-                      if (thumbnailUrl.endsWith("?size=2")) {
-                        setThumbnailUrl(`/api/thumb/${data.encryptedId}`);
-                        setThumbnailLoading(false);
-                      }
-                    }}
-                    className={cn(
-                      "relative z-0 h-24 w-full shrink-0 grow-0 object-contain object-center transition duration-500 ease-in-out group-hover:scale-105 mobile:h-28 tablet:h-32",
-                      layout === "list" && "h-20 mobile:h-24 tablet:h-28",
-                      thumbnailLoading ? "blur-lg" : "blur-0",
-                    )}
-                  />
-
-                  {/* Play Icon */}
-                  {data.mimeType.includes("video") && (
-                    <div className='absolute inset-0 z-0 grid h-full w-full place-items-center'>
-                      <Button
-                        size={"icon"}
-                        variant={"outline"}
-                        className='rounded-full group-hover:bg-accent group-hover:stroke-accent-foreground group-hover:text-accent-foreground'
-                      >
-                        <Icon
-                          name='Play'
-                          className='fill-current'
-                        />
-                      </Button>
-                      <div className='absolute bottom-0.5 right-0.5 z-0 rounded-sm bg-muted px-1 py-0.5 text-[10px] text-muted-foreground shadow-sm mobile:bottom-1 mobile:right-1 mobile:text-xs'>
-                        {durationToReadable(data.videoMediaMetadata?.durationMillis ?? 0)}
-                      </div>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className='grid h-full w-full place-items-center'>
-                  <Icon
-                    name={
-                      data.mimeType.includes("folder")
-                        ? "Folder"
-                        : getPreviewIcon(data.fileExtension ?? "", data.mimeType)
-                    }
-                    className={cn("size-10 stroke-muted-foreground", layout === "list" && "size-8")}
-                  />
-                </div>
-              )}
-            </div>
-
             {/* Info */}
             <div
               className={cn(
@@ -213,7 +129,6 @@ export default function FileItem({ data, layout }: Props) {
                     {/* Size */}
                     {!data.mimeType.includes("folder") && bytesToReadable(data.size ?? 0)}
                   </span>
-                  <span className='text-xs text-muted-foreground'>{formatDate(data.modifiedTime)}</span>
                 </div>
               </div>
               <Button

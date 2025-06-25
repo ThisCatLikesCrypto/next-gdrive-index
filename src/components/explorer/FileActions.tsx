@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { type z } from "zod";
 
@@ -25,12 +25,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
 import Icon from "~/components/ui/icon";
 import { Input } from "~/components/ui/input";
 import { Separator } from "~/components/ui/separator";
@@ -40,8 +34,7 @@ import { useLayout } from "~/context/layoutContext";
 import { useResponsive } from "~/context/responsiveContext";
 import useLoading from "~/hooks/useLoading";
 import useRouter from "~/hooks/usePRouter";
-import { getPreviewIcon } from "~/lib/previewHelper";
-import { bytesToReadable, cn, durationToReadable, formatDate } from "~/lib/utils";
+import { bytesToReadable, cn, formatDate } from "~/lib/utils";
 
 import { type Schema_File } from "~/types/schema";
 
@@ -114,47 +107,6 @@ export default function FileActions() {
     >
       {isDesktop ? (
         <>
-          <DropdownMenu
-            open={layoutOpen}
-            onOpenChange={setLayoutOpen}
-          >
-            <DropdownMenuTrigger asChild>
-              <Button variant={"outline"}>
-                <Icon name={layout === "grid" ? "LayoutGrid" : "LayoutList"} />
-                {layout === "grid" ? "Grid" : "List"}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem
-                disabled={isPending ?? layout === "grid"}
-                onClick={() => {
-                  setLayout("grid");
-                }}
-              >
-                <div className='flex w-full items-center justify-between'>
-                  Grid
-                  <Icon
-                    name={layout === "grid" ? "Check" : "LayoutGrid"}
-                    className='stroke-foreground'
-                  />
-                </div>
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                disabled={isPending ?? layout === "list"}
-                onClick={() => {
-                  setLayout("list");
-                }}
-              >
-                <div className='flex w-full items-center justify-between'>
-                  List
-                  <Icon
-                    name={layout === "list" ? "Check" : "LayoutList"}
-                    className='stroke-foreground'
-                  />
-                </div>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
           <Dialog
             open={searchOpen}
             onOpenChange={(open) => {
@@ -430,14 +382,6 @@ export default function FileActions() {
 function SearchResultItem({ data }: { data: z.infer<typeof Schema_File> }) {
   const router = useRouter();
 
-  const useThumbnail = useMemo<boolean>(
-    () => !!(data.thumbnailLink && (data.mimeType.includes("image") || data.mimeType.includes("video"))),
-    [data],
-  );
-
-  const [thumbnailUrl, setThumbnailUrl] = useState<string>(`/api/thumb/${data.encryptedId}?size=2`);
-  const [thumbnailLoading, setThumbnailLoading] = useState<boolean>(true);
-
   const onOpen = useCallback(async () => {
     toast.loading("Getting file path...", {
       description: "Might take a while for deep nested file",
@@ -466,61 +410,6 @@ function SearchResultItem({ data }: { data: z.infer<typeof Schema_File> }) {
       className='group flex cursor-pointer items-center overflow-hidden rounded-lg border bg-card text-card-foreground shadow transition hover:border-accent-foreground'
       onClick={onOpen}
     >
-      {/* Thumbnail / Icon */}
-      <div className='relative grid aspect-square h-full w-14 shrink-0 place-items-center overflow-hidden mobile:w-16 tablet:w-20'>
-        {useThumbnail ? (
-          <>
-            <img
-              src={thumbnailUrl}
-              alt={data.name}
-              className='absolute -z-0 h-full w-full shrink-0 grow-0 object-cover object-center opacity-50 blur-sm'
-            />
-            <img
-              src={thumbnailUrl}
-              alt={data.name}
-              onLoad={() => {
-                if (thumbnailUrl.endsWith("size=2")) {
-                  setThumbnailUrl(`/api/thumb/${data.encryptedId}`);
-                  setThumbnailLoading(false);
-                }
-              }}
-              className={cn(
-                "relative z-0 w-full shrink-0 grow-0 object-contain object-center transition duration-500 ease-in-out group-hover:scale-105",
-                thumbnailLoading ? "blur-lg" : "blur-0",
-              )}
-            />
-
-            {data.mimeType.includes("video") && (
-              <div className='absolute inset-0 z-0 grid h-full w-full place-items-center'>
-                <Button
-                  size={"icon"}
-                  variant={"outline"}
-                  className='rounded-full group-hover:bg-accent group-hover:stroke-accent-foreground group-hover:text-accent-foreground'
-                >
-                  <Icon
-                    name='Play'
-                    className='fill-current'
-                  />
-                </Button>
-                <div className='absolute bottom-0.5 right-0.5 z-0 rounded-sm bg-muted px-1 py-0.5 text-[10px] text-muted-foreground shadow-sm mobile:bottom-1 mobile:right-1 mobile:text-xs'>
-                  {durationToReadable(data.videoMediaMetadata?.durationMillis ?? 0)}
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <div className='grid h-full w-full place-items-center'>
-              <Icon
-                name={
-                  data.mimeType.includes("folder") ? "Folder" : getPreviewIcon(data.fileExtension ?? "", data.mimeType)
-                }
-                className={"size-6 stroke-muted-foreground"}
-              />
-            </div>
-          </>
-        )}
-      </div>
 
       {/* Info */}
       <div className='flex h-full grow flex-col justify-start p-2'>

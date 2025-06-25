@@ -96,10 +96,7 @@ export default function FileExplorerLayout({ encryptedId, files, nextPageToken, 
         <div
           slot='file-container'
           className={cn(
-            "w-full",
-            layout === "list"
-              ? "flex flex-col gap-2"
-              : "grid grid-cols-1 gap-2 mobile:grid-cols-2 tablet:grid-cols-3 desktop:grid-cols-4",
+            "w-full grid grid-cols-1 gap-1 mobile:grid-cols-2 tablet:grid-cols-3 desktop:grid-cols-5",
           )}
         >
           {filesList.map((file) => (

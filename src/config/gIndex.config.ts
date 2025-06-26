@@ -198,15 +198,6 @@ const config: z.input<typeof Schema_Config> = {
     showFileExtension: true,
 
     /**
-     * Site wide password protection
-     * If this is set, all files and folders will be protected by this password
-     *
-     * The site password are set from Environment Variable (NEXT_GDRIVE_INDEX_PASSWORD)
-     * It's because I don't want to store sensitive data in the code
-     */
-    privateIndex: false,
-
-    /**
      * Maximum breadcrumb length
      * If the breadcrumb is longer than this, it will be shortened
      */

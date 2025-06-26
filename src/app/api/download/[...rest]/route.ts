@@ -5,7 +5,6 @@ import { encryptionService, gdrive } from "~/lib/utils.server";
 import { GetFile } from "~/actions/files";
 import { CheckIndexPassword, CheckPagePassword } from "~/actions/password";
 import { ValidatePaths } from "~/actions/paths";
-import { ValidateFileToken } from "~/actions/token";
 
 import config from "config";
 
@@ -15,28 +14,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const { rest } = await params;
   const sp = new URL(request.nextUrl).searchParams;
   const forceRedirect = sp.get("redirect") === "1";
-  const token = sp.get("token");
   const paths = rest.map((path) => {
     if (path.startsWith("/")) return decodeURIComponent(path.slice(1));
     return decodeURIComponent(path);
   });
 
   try {
-    if (!config.apiConfig.allowDownloadProtectedFile) {
-      if (!token) {
-        throw new Error("[401] Token not found", {
-          cause: "This endpoint requires a token to download the file",
-        });
-      }
-
-      const validateToken = await ValidateFileToken(token);
-      if (!validateToken.success) {
-        throw new Error(`[401] ${validateToken.message}`, {
-          cause: validateToken.error,
-        });
-      }
-    }
-
     const validatedPaths = await ValidatePaths(paths);
     if (!validatedPaths.success) {
       throw new Error(`[404] ${validatedPaths.message}`, {

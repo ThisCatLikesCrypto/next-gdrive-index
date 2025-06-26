@@ -1,19 +1,15 @@
 import { type Metadata, type ResolvedMetadata } from "next";
 import { notFound } from "next/navigation";
-import { type z } from "zod";
 
 import { FileActions, FileBreadcrumb, FileExplorerLayout, FileReadme } from "~/components/explorer";
-import { ErrorComponent, Password } from "~/components/layout";
+import { ErrorComponent } from "~/components/layout";
 import { PreviewLayout } from "~/components/preview";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 import { getFileType } from "~/lib/previewHelper";
 import { formatPathToBreadcrumb } from "~/lib/utils";
 
-import { type Schema_File } from "~/types/schema";
-
-import { GetBanner, GetFile, GetReadme, GetSiblingsMedia, ListFiles } from "~/actions/files";
-import { CheckPagePassword } from "~/actions/password";
+import { GetBanner, GetFile, GetReadme, ListFiles } from "~/actions/files";
 import { ValidatePaths } from "~/actions/paths";
 import { CreateFileToken } from "~/actions/token";
 
@@ -60,17 +56,6 @@ export default async function RestPage({ params }: Props) {
 
   const paths = await ValidatePaths(rest);
   if (!paths.success) notFound();
-
-  const unlocked = await CheckPagePassword(paths.data);
-  if (!unlocked.success) {
-    return (
-      <Password
-        type='path'
-        paths={paths.data}
-        errorMessage={unlocked.error}
-      />
-    );
-  }
 
   const currentPath = paths.data[paths.data.length - 1];
   if (!currentPath) return <ErrorComponent error={new Error("Failed to get current path")} />;
@@ -134,14 +119,6 @@ export default async function RestPage({ params }: Props) {
   const token = await CreateFileToken(file.data);
   if (!token.success) return <ErrorComponent error={new Error(token.error)} />;
 
-  // Check if file is media (video / audio)
-  let playlistFiles: z.infer<typeof Schema_File>[] = [];
-  if (file.data.mimeType.includes("video") || file.data.mimeType.includes("audio")) {
-    const sib = await GetSiblingsMedia(rest);
-    if (!sib.success) return <ErrorComponent error={new Error(sib.error)} />;
-    playlistFiles = sib.data;
-  }
-
   return (
     <Layout>
       <PreviewLayout
@@ -152,7 +129,6 @@ export default async function RestPage({ params }: Props) {
             : "unknown"
         }
         token={token.data}
-        playlist={playlistFiles}
         paths={rest}
       />
     </Layout>

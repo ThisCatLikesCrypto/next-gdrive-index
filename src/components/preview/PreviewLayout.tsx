@@ -19,7 +19,6 @@ type Props = {
   data: z.infer<typeof Schema_File>;
   fileType: "unknown" | ReturnType<typeof getFileType>;
   token: string;
-  playlist: z.infer<typeof Schema_File>[];
   paths: string[];
 };
 

@@ -9,7 +9,6 @@ export const dynamic = "force-static";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ rest: string[] }> }) {
   const { rest } = await params;
-  const ALLOWED_TYPES = ["image/*", "video/*", "audio/*"]; // Based from mime types
   const paths = rest.map((path) => {
     if (path.startsWith("/")) return decodeURIComponent(path.slice(1));
     return decodeURIComponent(path);
@@ -27,11 +26,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (!currentFile) {
       throw new Error("[404] File not found", {
         cause: "Failed to get current file",
-      });
-    }
-    if (ALLOWED_TYPES.every((type) => !new RegExp(type.replace("*", ".*")).test(currentFile.mimeType))) {
-      throw new Error("[400] Invalid file type", {
-        cause: "Raw link only available for video, image, and audio files",
       });
     }
 

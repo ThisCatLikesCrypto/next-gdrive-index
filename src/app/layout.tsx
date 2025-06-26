@@ -2,13 +2,10 @@ import { type Metadata } from "next";
 import { JetBrains_Mono, Outfit, Source_Sans_3 } from "next/font/google";
 import { headers } from "next/headers";
 import { BASE_URL } from "~/constant";
-import { type ActionResponseSchema } from "~/types";
 
-import { Footer, Navbar, Password, Provider, ToTop } from "~/components/layout";
+import { Footer, Navbar, Provider, ToTop } from "~/components/layout";
 
 import { cn, formatFooterContent } from "~/lib/utils";
-
-import { CheckIndexPassword } from "~/actions/password";
 import "~/styles/code-highlight.css";
 import "~/styles/globals.css";
 import "~/styles/markdown.css";
@@ -77,14 +74,6 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const head = await headers();
   const pathname = head.get("X-Pathname") ?? "/";
-  let unlocked: ActionResponseSchema = {
-    success: true,
-    message: "Index is public",
-    data: undefined,
-  };
-  if (config.siteConfig.privateIndex) {
-    unlocked = await CheckIndexPassword();
-  }
 
   return (
     <html
@@ -125,14 +114,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               "tablet:gap-6",
             )}
           >
-            {config.siteConfig.privateIndex && !unlocked.success ? (
-              <Password
-                type='global'
-                errorMessage={unlocked.error}
-              />
-            ) : (
-              <>{children}</>
-            )}
+          {children}
           </main>
           <Footer content={formatFooterContent(config.siteConfig.footer ?? [])} />
           <ToTop />

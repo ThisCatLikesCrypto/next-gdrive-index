@@ -4,7 +4,7 @@ import { encryptionService, gdrive } from "~/lib/utils.server";
 
 import config from "config";
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
 
 type Props = {
   params: Promise<{
